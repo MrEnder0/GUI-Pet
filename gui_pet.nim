@@ -5,14 +5,16 @@ import wNim
 type
     MenuID = enum
         idQuit = wIdUser
-        idPet, idWait, idDevMode
+        idPet, idWait, idShowHappiness
 
 #App vars
 let app = App()
 let frame = Frame(title="Gui Pet", size=(350,350))
 let panel = Panel(frame)
 let menuBar = MenuBar(frame)
-var isDevMode = "false"
+
+#Options vars
+var isShowHappiness = "false"
 
 #InteractionsMenu vars
 let InteractionsMenu = Menu(menuBar, "Interactions")
@@ -23,9 +25,10 @@ InteractionsMenu.appendSeparator()
 let action_quit = InteractionsMenu.append(idQuit, "Quit")
 InteractionsMenu.appendSeparator()
 
-let DevMenu = Menu(menuBar, "Developer Options")
-DevMenu.appendCheckItem(idDevMode, "Development Mode")
-DevMenu.appendSeparator()
+#OptionsMenu vars
+let OptionsMenu = Menu(menuBar, "Options")
+OptionsMenu.appendCheckItem(idShowHappiness, "Show happiness")
+OptionsMenu.appendSeparator()
 
 #Pet Vars
 var label = StaticText(panel, label=":)")
@@ -37,11 +40,11 @@ frame.wEvent_Menu do (event: wEvent):
     if event.id == idQuit:
         frame.close()
     if event.id == idPet:
-        happyness += rand(7) + 1
+        happyness += rand(5) + 3
         if happyness > 100:
             happyness = 100
     if event.id == idWait:
-        happyness -= rand(15) - 1
+        happyness -= rand(8) - 2
         if happyness < 0:
             happyness = 0
 
@@ -49,9 +52,9 @@ frame.wEvent_Menu do (event: wEvent):
     if happyness < 0:
         happyness = 0
     
-    #Dev menu events
-    isDevMode = $menuBar.isChecked(idDevMode)
-    if isDevMode == "true":
+    #Options menu events
+    isShowHappiness = $menuBar.isChecked(idShowHappiness)
+    if isShowHappiness == "true":
         echo fmt"Happyness is {happyness}%"
 
     if happyness > 66:
